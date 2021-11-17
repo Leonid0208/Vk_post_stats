@@ -1,0 +1,21 @@
+{% extends "blog/wall.html" %}
+{% block content %}
+    {% for post in data %}
+        <div class="post">
+            <div id="vk_post_{{ post.owner_id }}_{{ post.id }}"></div>
+            <script type="text/javascript">
+              (function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = "https://vk.com/js/api/openapi.js?169"; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'vk_openapi_js'));
+              (function() {
+                window.VK && VK.Widgets && VK.Widgets.Post && VK.Widgets.Post("vk_post_{{ post.owner_id }}_{{ post.id }}", -{{ post.owner_id }}, {{ post.id }}, '{{ post.hash }}', {width: 500}) || setTimeout(arguments.callee, 50);  }());
+            </script>
+{#            <a href=""><button type="button" class="btn btn-info">Подробнее</button></a>#}
+            <form action="{% url 'stat' %}" method="post" class="stat">
+              {% csrf_token %}
+              <input type="text" name="post_info" value="{{ post.info }}" />
+
+              <button type="submit" class="btn btn-info more_info">Подробнее</button>
+            </form>
+        </div>
+    {% endfor %}
+
+{% endblock %}
